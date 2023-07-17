@@ -1,0 +1,37 @@
+
+   _____  _                    _    ____              
+  / ____|| |                  | |  / __ \             
+ | |     | |  ___   _   _   __| | | |  | | _ __   ___ 
+ | |     | | / _ \ | | | | / _` | | |  | || '_ \ / __|
+ | |____ | || (_) || |_| || (_| | | |__| || |_) |\__ \
+  \_____||_| \___/  \__,_| \__,_|  \____/ | .__/ |___/
+                                          | |         
+                                          |_|         
+       
+
+
+Parabéns! Você instalou com sucesso a ferramenta {{ .Chart.Name }}!
+
+Agora será necessário criar o arquivo responsável, por "ligar" e "desligar" workloads no cluster. 
+Para começar, você pode usar o exemplo abaixo:
+
+---
+apiVersion: kube-green.com/v1alpha1
+kind: SleepInfo
+metadata:
+  name: horario-comercial
+spec:
+  weekdays: "1-5"
+  sleepAt: "18:00"
+  wakeUpAt: "08:00"
+  timeZone: "America/Sao_Paulo"
+---
+
+Atenção!! 
+O objeto SleepInfo, deve ser aplicado nos namespaces, que você deseja desligar.
+
+Para maiores detalhes de configurações e parametros, acesse: https://kube-green.dev/docs/configuration/
+
+Obrigado, 
+
+Até o próximo deploy! =D

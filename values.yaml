@@ -1,0 +1,83 @@
+# Default values for kube-green.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+name: kube-green 
+namespace: kube-green
+
+replicaCount: 1
+
+image:
+  repository: kubegreen/kube-green # Após homologar alterar para ECR
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "0.5.1"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: "kube-green-controller-manager"
+
+podAnnotations:
+  kubectl.kubernetes.io/default-container: manager
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+# The webhook service
+webhookService:
+  type: ClusterIP
+  port: 9443
+
+# Controller Manager Metrics Service
+service:
+  type: ClusterIP
+  port: 8443
+
+resources:
+  limits:
+    cpu: 400m
+    memory: 400Mi
+  requests:
+    cpu: 100m
+    memory: 50Mi
+
+livenessProbe:
+  failureThreshold: 2
+  httpGet:
+    path: /healthz
+    port: 8081
+    scheme: HTTP
+  initialDelaySeconds: 60
+  timeoutSeconds: 10  
+
+readinessProbe:
+  failureThreshold: 2
+  httpGet:
+    path: /readyz
+    port: 8081
+    scheme: HTTP
+  initialDelaySeconds: 30
+  timeoutSeconds: 10 
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+  #type: service

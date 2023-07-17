@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "kube-green.fullname" . }}-controller-manager-metrics-service
+  labels:
+    {{- include "kube-green.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: https
+      protocol: TCP
+      name: https
+  selector:
+    {{- include "kube-green.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "kube-green.fullname" . }}-webhook-service
+  labels:
+    {{- include "kube-green.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: 443
+      targetPort: {{ .Values.webhookService.port }}
+      protocol: TCP
+  selector:
+    {{- include "kube-green.selectorLabels" . | nindent 4 }}
